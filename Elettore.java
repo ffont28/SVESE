@@ -20,6 +20,7 @@ public class Elettore {
         this.nome = nome;
         this.cognome = cognome;
         this.nazione = nazione;
+        int a = 0;
         this.data = data;
         this.comune = comuneResidenza;
         this.vote = false;
