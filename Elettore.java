@@ -2,6 +2,8 @@ import java.util.*;
 
 public class Elettore {
 
+    // @ invariant (!data.isMaggiorenne()) ==> (voto==true)
+
     // ATTRIBUTI
     public final String nome, cognome, nazione, comune;
     public final char sex;
@@ -10,6 +12,18 @@ public class Elettore {
     char[] codFisc;
 
     // COSTRUTTORI
+
+    // Per i requires dell'attributo data leggere classe Data
+    // @ requires (nazione == "IT") ==> comune != ""
+    // @ requires nome != null && cognome != null
+    // @ requires sex == 'M' || sex == 'F'
+    // @ requires (\forall int i; i>= 12 && i <= 14; codFisc[i]>=0 &&codFisc[i]<=9)
+    // @ requires ( (codFisc[11]>'A' && codFisc[11]<'Z') && (codFisc[15]>'A' &&
+    // codFisc[15]<'Z') )
+    // @ requires ( (codFisc[11]>'a' && codFisc[11]<'z') && (codFisc[15]>'a' &&
+    // codFisc[15]<'z') )
+    // @ requires nazione!='IT' ==> (codFisc[11]=='Z' || codFisc[11]=='z')
+    // @ requires nazione=='IT' ==> (codFisc[11]!='Z' && codFisc[11]!='z')
     public Elettore(String nome, String cognome, Data data, char sex, String codFisc, String nazione,
             String comuneResidenza) {
         Objects.requireNonNull(nome, "NOME NON PUO ESSERE NULL");
@@ -21,8 +35,12 @@ public class Elettore {
         this.cognome = cognome;
         this.nazione = nazione;
         this.data = data;
-        this.comune = comuneResidenza;
         this.vote = false;
+
+        if (this.nazione.equals("IT"))
+            this.comune = comuneResidenza;
+        else
+            this.comune = "";
 
         if (!controllaSex(sex))
             throw new IllegalArgumentException("SESSO NON VALIDO");
@@ -32,7 +50,7 @@ public class Elettore {
         if (!controllaCodFisc(codFisc))
             throw new IllegalArgumentException("CODICE FISCALE NON VALIDO");
         else
-            this.codFisc = codFisc.toCharArray();
+            this.codFisc = codFisc.toUpperCase().toCharArray();
 
     }
 
@@ -268,8 +286,13 @@ public class Elettore {
     }
 
     // METODI
+
+    // @ requires vote == false
+    // @ ensures vote == !\old(vote)
     public void esprimiVoto() {
-        vote = true;
+        if (this.vote == true)
+            throw new IllegalArgumentException("HAI GIA' VOTATO");
+        this.vote = true;
     }
 
     public String toString() {

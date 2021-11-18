@@ -8,6 +8,8 @@ public class Data {
   final int meseNow = Integer.parseInt(lt.toString().split("-")[1]);
   final int giornoNow = Integer.parseInt(lt.toString().split("-")[2]);
 
+  // @ requires (anno < annoNow) || ((anno == annoNow) && ((mese < meseNow) ||
+  // ((mese== meseNow) && (giorno <= giornoNow))))
   public Data(int giorno, int mese, int anno) {
     Objects.requireNonNull(giorno);
     Objects.requireNonNull(mese);
