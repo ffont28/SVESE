@@ -20,28 +20,236 @@ public class Elettore {
         this.nome = nome;
         this.cognome = cognome;
         this.nazione = nazione;
-        int a = 0;
-        int Prova
         this.data = data;
         this.comune = comuneResidenza;
         this.vote = false;
+
+        if (!controllaSex(sex))
+            throw new IllegalArgumentException("SESSO NON VALIDO");
+        else
+            this.sex = sex;
 
         if (!controllaCodFisc(codFisc))
             throw new IllegalArgumentException("CODICE FISCALE NON VALIDO");
         else
             this.codFisc = codFisc.toCharArray();
-        if (!controllaSex(sex))
-            throw new IllegalArgumentException("SESSO NON VALIDO");
-        else
-            this.sex = sex;
+
     }
 
     private boolean controllaCodFisc(String codFisc) {
+        if (!controlloCognome(codFisc.substring(0, 3)))
+            return false;
+        else if (!controlloNome(codFisc.substring(3, 6)))
+            return false;
+        else if (!controllaData(codFisc.substring(6, 11)))
+            return false;
+        else if (!cinquePos(codFisc))
+            return false;
+        return true;
+    }
+
+    private boolean controlloCognome(String treLettere) {
+        int iControllo = 0;
+
+        for (char c : this.cognome.toUpperCase().toCharArray()) {
+            if (c != 'A' && c != 'E' && c != 'I' && c != 'O' && c != 'U') {
+                if (c != treLettere.charAt(iControllo)) {
+                    return false;
+                } else {
+                    iControllo++;
+                    if (iControllo == 3)
+                        break;
+                }
+            }
+        }
+
+        if (iControllo < 2) {
+            for (char c : this.cognome.toUpperCase().toCharArray()) {
+                if (c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
+                    if (c != treLettere.charAt(iControllo)) {
+                        return false;
+                    } else {
+                        iControllo++;
+                        if (iControllo == 3)
+                            break;
+                    }
+                }
+            }
+        }
+
+        while (iControllo < 3) {
+            if (treLettere.charAt(iControllo) != 'X')
+                return false;
+            iControllo++;
+        }
+
+        return true;
+    }
+
+    private boolean controlloNome(String treLettere) {
+        int cons = 0, iControllo = 0;
+        for (char c : this.nome.toUpperCase().toCharArray()) {
+            if (c != 'A' && c != 'E' && c != 'I' && c != 'O' && c != 'U') {
+                cons++;
+            }
+        }
+
+        if (cons < 4) {
+            for (char c : this.nome.toUpperCase().toCharArray()) {
+                if (c != 'A' && c != 'E' && c != 'I' && c != 'O' && c != 'U') {
+                    if (c != treLettere.charAt(iControllo)) {
+                        return false;
+                    } else {
+                        iControllo++;
+                        if (iControllo == 3)
+                            break;
+                    }
+                }
+            }
+
+            if (iControllo < 2) {
+                for (char c : this.nome.toUpperCase().toCharArray()) {
+                    if (c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
+                        if (c != treLettere.charAt(iControllo)) {
+                            return false;
+                        } else {
+                            iControllo++;
+                            if (iControllo == 3)
+                                break;
+                        }
+                    }
+                }
+            }
+
+            while (iControllo < 3) {
+                if (treLettere.charAt(iControllo) != 'X')
+                    return false;
+                iControllo++;
+            }
+        } else {
+
+            int count = 1;
+            for (char c : this.nome.toUpperCase().toCharArray()) {
+                if (c != 'A' && c != 'E' && c != 'I' && c != 'O' && c != 'U') {
+                    if (c != treLettere.charAt(iControllo) && count != 2) {
+                        return false;
+                    } else if (count != 2) {
+                        iControllo++;
+                        if (iControllo == 3)
+                            break;
+                    }
+                    count++;
+                }
+            }
+
+            if (iControllo < 2) {
+                for (char c : this.nome.toUpperCase().toCharArray()) {
+                    if (c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
+                        if (c != treLettere.charAt(iControllo)) {
+                            return false;
+                        } else {
+                            iControllo++;
+                            if (iControllo == 3)
+                                break;
+                        }
+                    }
+                }
+            }
+
+            while (iControllo < 3) {
+                if (treLettere.charAt(iControllo) != 'X')
+                    return false;
+                iControllo++;
+            }
+        }
+        return true;
+    }
+
+    private boolean controllaData(String str) {
+        if (Integer.parseInt(str.substring(0, 2)) != this.data.anno % 100)
+            return false;
+        if (sex == 'F') {
+            if (Integer.parseInt(str.substring(3, 5)) != (this.data.giorno % 100) + 40)
+                return false;
+        } else {
+            if (Integer.parseInt(str.substring(3, 5)) != this.data.giorno % 100)
+                return false;
+        }
+
+        switch (str.charAt(2)) {
+        case 'A': {
+            if (this.data.mese != 1)
+                return false;
+            break;
+        }
+        case 'B': {
+            if (this.data.mese != 2)
+                return false;
+            break;
+        }
+        case 'C': {
+            if (this.data.mese != 3)
+                return false;
+            break;
+        }
+        case 'D': {
+            if (this.data.mese != 4)
+                return false;
+            break;
+        }
+        case 'E': {
+            if (this.data.mese != 5)
+                return false;
+            break;
+        }
+        case 'H': {
+            if (this.data.mese != 6)
+                return false;
+            break;
+        }
+        case 'L': {
+            if (this.data.mese != 7)
+                return false;
+            break;
+        }
+        case 'M': {
+            if (this.data.mese != 8)
+                return false;
+            break;
+        }
+        case 'P': {
+            if (this.data.mese != 9)
+                return false;
+            break;
+        }
+        case 'R': {
+            if (this.data.mese != 10)
+                return false;
+            break;
+        }
+        case 'S': {
+            if (this.data.mese != 11)
+                return false;
+            break;
+        }
+        case 'T': {
+            if (this.data.mese != 12)
+                return false;
+            break;
+        }
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean cinquePos(String codFisc) {
         if (codFisc.length() != 16)
             return false;
-        else if (codFisc.toUpperCase().charAt(15) > 'Z' && codFisc.toUpperCase().charAt(15) < 'A')
+        else if (codFisc.toUpperCase().charAt(15) > 'Z' || codFisc.toUpperCase().charAt(15) < 'A')
             return false;
-        else if (codFisc.toUpperCase().charAt(11) > 'Z' && codFisc.toUpperCase().charAt(11) < 'A')
+        else if (codFisc.toUpperCase().charAt(11) > 'Z' || codFisc.toUpperCase().charAt(11) < 'A')
             return false;
         else if (!nazione.equals("IT") && codFisc.toUpperCase().charAt(11) != 'Z')
             return false;
@@ -50,7 +258,6 @@ public class Elettore {
         for (int i = 12; i < 15; i++)
             if (codFisc.charAt(i) < '0' && codFisc.charAt(i) > '9')
                 return false;
-
         return true;
     }
 
