@@ -2,26 +2,26 @@ import java.util.*;
 
 public class Elettore {
   
-	// @ invariant (!data.isMaggiorenne()) ==> (voto==true)
+  //@ invariant (data.isMaggiorenne()) ==> (vote == true);
 
   // ATTRIBUTI
   public final String nome, cognome, nazione, comune;
   public final char sex;
-  private final Data data;
-  private boolean vote;
+  public final Data data;
+  public boolean vote;
   char[] codFisc;
 
   //COSTRUTTORI
 
   // Per i requires dell'attributo data leggere classe Data
-  // @ requires (nazione.equals "IT") ==> !comune.equals("")  
-  // @ requires nome != null && cognome != null
-  // @ requires sex.equals('M') || sex.equals('F')
-  // @ requires (\forall int i; i>= 12 && i <= 14; codFisc[i]>=0 && codFisc[i]<=9)
-  // @ requires ( (codFisc[11]>'A' && codFisc[11]<'Z') && (codFisc[15]>'A'  && codFisc[15]<'Z') )
-  // @ requires ( (codFisc[11]>'a' && codFisc[11]<'z') && (codFisc[15]>'a'  && codFisc[15]<'z') )
-  // @ requires !nazione.equals('IT') ==> (codFisc[11].equals('Z') || codFisc[11].equals('z'))
-  // @ requires nazione.equals('IT') ==> (codFisc[11]!='Z' && !codFisc[11].equals('z'))
+  //@ requires (nazione=="IT") ==> !comune.equals("");  
+  //@ requires nome != null && cognome != null;
+  //@ requires sex=='M' || sex=='F';
+  //@ requires (\forall int i; i>= 12 && i <= 14; codFisc.charAt(i)>'0' && codFisc.charAt(i)<=9);
+  //@ requires ( codFisc.charAt(11)>'A' && codFisc.charAt(11)<'Z') && (codFisc.charAt(15)>'A'  && codFisc.charAt(15)<'Z');
+  //@ requires codFisc.charAt(11)>'a' && codFisc.charAt(11)<'z' && codFisc.charAt(15)>'a'  && codFisc.charAt(15)<'z';
+  //@ requires !(nazione=="IT") ==> (codFisc.charAt(11)=='Z' || codFisc.charAt(11)=='z');
+  //@ requires nazione=="IT" ==> (!(codFisc.charAt(11)=='Z') && !(codFisc.charAt(11)=='z'));
   public Elettore(String nome, String cognome, Data data, char sex, String codFisc, String nazione,
       String comuneResidenza) {
     Objects.requireNonNull(nome, "NOME NON PUO ESSERE NULL");
@@ -74,7 +74,7 @@ public class Elettore {
         } else {
           iControllo++;
           if (iControllo == 3)
-            break;
+            return true;
         }
       }
     }
@@ -87,7 +87,7 @@ public class Elettore {
           } else {
             iControllo++;
             if (iControllo == 3)
-              break;
+              return true;
           }
         }
       }
@@ -118,7 +118,7 @@ public class Elettore {
           } else {
             iControllo++;
             if (iControllo == 3)
-              break;
+              return true;
           }
         }
       }
@@ -131,7 +131,7 @@ public class Elettore {
             } else {
               iControllo++;
               if (iControllo == 3)
-                break;
+                return true;
             }
           }
         }
@@ -152,7 +152,7 @@ public class Elettore {
           } else if (count != 2) {
             iControllo++;
             if (iControllo == 3)
-              break;
+              return true;
           }
           count++;
         }
@@ -166,7 +166,7 @@ public class Elettore {
             } else {
               iControllo++;
               if (iControllo == 3)
-                break;
+                return true;
             }
           }
         }
@@ -236,8 +236,7 @@ public class Elettore {
 
   // METODI
   
-  // @ requires vote == false
-  // @ ensures vote == !\old(vote)
+  //@ ensures this.vote == true;
   public void esprimiVoto() {
     if (this.vote == true)
       throw new IllegalArgumentException("HAI GIA' VOTATO");
