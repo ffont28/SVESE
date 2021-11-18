@@ -21,6 +21,7 @@ public class Elettore {
         this.cognome = cognome;
         this.nazione = nazione;
         int a = 0;
+        int Prova
         this.data = data;
         this.comune = comuneResidenza;
         this.vote = false;
