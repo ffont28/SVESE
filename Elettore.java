@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Elettore {
   
-  //@ invariant (data.isMaggiorenne()) ==> (vote == true);
+  //@public invariant (data.isMaggiorenne()) ==> (vote == true);
 
   // ATTRIBUTI
   public final String nome, cognome, nazione, comune;
@@ -14,14 +14,14 @@ public class Elettore {
   //COSTRUTTORI
 
   // Per i requires dell'attributo data leggere classe Data
-  //@ requires (nazione=="IT") ==> !comune.equals("");  
+  //@ requires (nazione.equals("IT")) ==> !comune.equals("");  
   //@ requires nome != null && cognome != null;
   //@ requires sex=='M' || sex=='F';
   //@ requires (\forall int i; i>= 12 && i <= 14; codFisc.charAt(i)>'0' && codFisc.charAt(i)<=9);
   //@ requires ( codFisc.charAt(11)>'A' && codFisc.charAt(11)<'Z') && (codFisc.charAt(15)>'A'  && codFisc.charAt(15)<'Z');
   //@ requires codFisc.charAt(11)>'a' && codFisc.charAt(11)<'z' && codFisc.charAt(15)>'a'  && codFisc.charAt(15)<'z';
-  //@ requires !(nazione=="IT") ==> (codFisc.charAt(11)=='Z' || codFisc.charAt(11)=='z');
-  //@ requires nazione=="IT" ==> (!(codFisc.charAt(11)=='Z') && !(codFisc.charAt(11)=='z'));
+  //@ requires !(nazione.equals("IT")) ==> (codFisc.charAt(11)=='Z' || codFisc.charAt(11)=='z');
+  //@ requires nazione.equals("IT") ==> (!(codFisc.charAt(11)=='Z') && !(codFisc.charAt(11)=='z'));
   public Elettore(String nome, String cognome, Data data, char sex, String codFisc, String nazione,
       String comuneResidenza) {
     Objects.requireNonNull(nome, "NOME NON PUO ESSERE NULL");
@@ -236,7 +236,8 @@ public class Elettore {
 
   // METODI
   
-  //@ ensures this.vote == true;
+  //@ requires vote == false;
+  //@ ensures vote == !\old(vote);
   public void esprimiVoto() {
     if (this.vote == true)
       throw new IllegalArgumentException("HAI GIA' VOTATO");
